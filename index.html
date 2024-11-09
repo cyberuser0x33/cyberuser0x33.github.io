@@ -1,11 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Github search</title>
 </head>
 <body>
-	<h1>test</h1>
+  <div class="input-body">
+    <h1>Github search user</h1>
+    <div><input type="text" id="input-field"><span><button id="btn-search">Search</button></span></div>
+    <div class="input-2">
+      <div id="results">
+        <p></p>
+      </div>
+    </div>
+  </div>
+  <style>
+    body{
+      background: lightblue;
+    }
+    .input-body{
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      
+    }
+    button{
+      margin-left: 10px;
+    }
+    input{
+      margin-top: 30px;
+    }
+    .input-2{
+      margin: 20px;
+      padding: 100px;
+      border: 1px solid black;
+      border-radius: 15px;
+      background: white;
+    }
+    #results h3, img{
+      text-align: center;
+    }
+    #results a{
+      text-align: center;
+    }
+    h1{
+      margin: 20px;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    $("#btn-search").click(function (){
+      let username = $("#input-field").val();
+      $(this).attr("disabled", true);
+      $.ajax(`https://api.github.com/users/${username}`,{
+        success: (result) =>{
+          $("#results").show();
+          if (result.error){
+            $("#results").html(`<h3>${result.error}</h3>`)
+          }
+          else{
+            $("#results").html(`
+              <h3>${result.login}</h3>
+              <img src="${result.avatar_url}" alt="image avatar" width="250px">
+              <br>
+              <a href="${result.html_url}" target="_blank">Link to profile</a>
+              `);
+          }
+          $(this).attr("disabled", false);
+
+        }
+      });
+    });
+  </script>
 </body>
 </html>
